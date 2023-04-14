@@ -2,12 +2,14 @@
 public class BTNode<T extends Comparable <T>> {
     T elem;
     BTNode<T> left, right,dad;
+    int ef=0;
 
     public BTNode(T elem) {
         this.elem = elem;
         this.left = null;
         this.right = null;
         this.dad = null;
+        ef=0;
     }
     
     public int descendants(){
@@ -64,6 +66,38 @@ public class BTNode<T extends Comparable <T>> {
         son.setDad(this);
     }
    
+    public void hangRight(BTNode<T> son){
+        if (son==null){
+            right=null;
+            return;
+        }
+        right=son;
+        son.dad=this;
+    }
     
+    public void hangLeft(BTNode<T> son){
+        if (son==null){
+            left=null;
+            return;
+        }
+        left=son;
+        son.dad=this;
+    }
+    
+    public void setRightNull(){
+        right=null;
+    }
+    
+    public void setLeftNull(){
+        left=null;
+    }
+    
+    public int getEF(){
+        return ef;
+    }
+    
+    public void setEF(int newEF){
+        this.ef=newEF;
+    }
     
 }
