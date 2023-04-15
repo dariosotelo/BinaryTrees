@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import java.util.List;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -13,21 +14,38 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args){
         LinkedBinaryTree<Integer> tree=new LinkedBinaryTree<Integer>();
-        ArrayList<Integer> list;
-        //To try out the solution, a list will be created
-        //the levels of the list will be 3
-        int i= 3;
-        list=ListGenerators.balancedTreeListGenerator(i);
-
-        //the first element will be a 4 which will be the root,
-        //the the two children of the list will be the subsequent 2 numbers
-        //the last 4 numbers will be the nodes belonging to the third level.
-        System.out.println(list);
+        List<Integer> list;
         
         //This solves the problem of having an unbalanced binary tree.
-        //The next step would be to insert the numbers into a tree.
         
+        //This code is to create the tree.
+        BTNode<Integer> root = new BTNode<>(4);
+        tree.setRoot(root);
+        root.setLeft(new BTNode<>(2));
+        root.setRight(new BTNode<>(6));
+        root.getLeft().setLeft(new BTNode<>(1));
+        root.getLeft().setRight(new BTNode<>(3));
+        root.getRight().setLeft(new BTNode<>(5));
+        root.getRight().setRight(new BTNode<>(7));
+        //In this section we will build an unbalanced tree.
+        root.left.left.setLeft(new BTNode<>(0));
+        root.left.left.left.setLeft(new BTNode<>(-1));
+        root.right.right.setRight(new BTNode<>(8));
+        root.right.right.right.setRight(new BTNode<>(9));
+        root.right.right.right.right.setRight(new BTNode<>(10));
+        root.right.right.right.right.right.setRight(new BTNode<>(11));
+
+        //We will ask to print the tree to show the unbalanced tree
+        tree.printTree(tree.root);
         
+        //These are the two lines of code which are going to balance the tree.
+        //the first one sorts the values of the nodes into a list
+        list=tree.getValues(tree.root);
+        
+        //this code is used to create a balanced tree from the list.
+        tree.root=tree.createTreeFromList(list);
+        
+        tree.printTree(tree.root);
 
     }
     

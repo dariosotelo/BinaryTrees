@@ -1,3 +1,9 @@
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Stack;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -227,5 +233,108 @@ public class LinkedBinaryTree <T extends Comparable<T> >{
             return actual.getDad();
     }
     
+    public <T extends Comparable<T>> List<T> getValues(BTNode<T> root) {
+        List<T> list = new ArrayList<>();
+        if (root==null)
+            return list;
+        Stack<BTNode<T>> stack = new Stack<>();
+        stack.push(root);
+        while (!stack.isEmpty()){
+            BTNode<T> node = stack.pop();
+            list.add(node.getElem());
+            if (node.right != null)
+                stack.push(node.right);
+            if (node.left != null)
+                stack.push(node.left);
+        }
+        Collections.sort(list);
+        return list;
+    }
+    
+    public <T extends Comparable<T>> BTNode<T> createTreeFromList(List<T> list) {
+        if (list==null || list.isEmpty())
+            return null;
+        int middleNumber = list.size()/2;
+        BTNode<T> root = new BTNode<>(list.get(middleNumber));
+        root.left = createTreeFromList(list.subList(0, middleNumber));
+        root.right = createTreeFromList(list.subList(middleNumber+1, list.size()));
+        return root;
+    }
+    
+    
+    //This rest of code just serves as a way to print the tree
+    public static <T extends Comparable<T>> void printTree(BTNode<T> root) {
+    int maxLevel = maxLevel(root);
+    printNode(Collections.singletonList(root), 1, maxLevel);
+    }
+
+    private static <T extends Comparable<T>> void printNode(List<BTNode<T>> nodes, int level, int maxLevel) {
+        if (nodes.isEmpty() || isAllElementsNull(nodes))
+            return;
+
+        int floor = maxLevel - level;
+        int edgeLines = (int) Math.pow(2, Math.max(floor - 1, 0));
+        int firstSpaces = (int) Math.pow(2, floor) - 1;
+        int betweenSpaces = (int) Math.pow(2, floor + 1) - 1;
+
+        printWhitespaces(firstSpaces);
+
+        List<BTNode<T>> newNodes = new ArrayList<>();
+        for (BTNode<T> node : nodes) {
+            if (node != null) {
+                System.out.print(node.getElem());
+                newNodes.add(node.getLeft());
+                newNodes.add(node.getRight());
+            } else {
+                newNodes.add(null);
+                newNodes.add(null);
+                System.out.print(" ");
+            }
+            printWhitespaces(betweenSpaces);
+        }
+        System.out.println();
+
+        for (int i = 1; i <= edgeLines; i++) {
+            for (BTNode<T> node : nodes) {
+                printWhitespaces(firstSpaces - i);
+                if (node == null) {
+                    printWhitespaces(edgeLines + edgeLines + i + 1);
+                    continue;
+                }
+                if (node.getLeft() != null)
+                    System.out.print("/");
+                else
+                    printWhitespaces(1);
+                printWhitespaces(i + i - 1);
+                if (node.getRight() != null)
+                    System.out.print("\\");
+                else
+                    printWhitespaces(1);
+                printWhitespaces(edgeLines + edgeLines - i);
+            }
+            System.out.println();
+        }
+        printNode(newNodes, level + 1, maxLevel);
+    }
+
+    private static void printWhitespaces(int count) {
+        for (int i = 0; i < count; i++)
+            System.out.print(" ");
+    }
+
+    private static <T extends Comparable<T>> int maxLevel(BTNode<T> node) {
+        if (node == null)
+            return 0;
+        return Math.max(maxLevel(node.getLeft()), maxLevel(node.getRight())) + 1;
+    }
+
+    private static <T> boolean isAllElementsNull(List<T> list) {
+        for (Object object : list) {
+            if (object != null)
+                return false;
+        }
+        return true;
+    }
+
 
 }
